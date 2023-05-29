@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recursion</title>
+  </head>
+  <body>
+    <script>
+      //ANy situation where you do something and depending on the result.you might do it again.
+      //recursion occurs when function calla itself.
+
+      // iterator function
+      const countToTen = (num = 1) => {
+        while (num <= 10) {
+          console.log(num);
+          num++;
+        }
+      };
+      countToTen();
+
+      //recursion function have 2 paets
+      //1)the recursive call to the function
+      //2) at least one condition to exit
+
+      const recursToTen = (num = 1) => {
+        if (num > 10) return;
+        console.log(num);
+        num++;
+        recurToTen(num);
+      };
+      //  recurToTen();
+
+      //The fibonacci sequence
+      //0,1,1,2,3,4,5,8,13,21etc
+
+      const fibonacci = (num, array = [0, 1]) => {
+        while (num > 2) {
+          const [nextToLast, last] = array.slice(-2);
+          array.push(nextToLast + last);
+          num -= 1;
+        }
+        return array;
+      };
+      console.log(fibonacci(12));
+
+      //with Recursion
+      //   const fib = (num, array = [0, 1]) => {
+      //     if (num <= 2) return array;
+      //     const [nextToLast, last] = array.slice(2);
+      //       return fib(num - 1, [...(array.nextToLast + last)]);
+      //   };
+      //   console.log(fib(12));
+
+      const fibonacciPos = (pos) => {
+        if (pos <= 1) return pos;
+        const seq = [0, 1];
+        for (let i = 2; i <= pos; i++) {
+          const [nextTolast, last] = seq.slice(-2);
+          seq.push(nextTolast + last);
+        }
+        return seq[pos];
+      };
+      console.log(fibonacciPos(8));
+
+      //with Recursion
+      // const fibPos = (pos) => {
+      //   if (pos < 2) return pos;
+      //   return fibPos(pos - 1) + fibPos(pos - 2);
+      // };
+      // console.log(fibPos(8));
+
+      const fibPos = (pos) =>
+        pos < 2 ? pos : fibPos(pos - 1) + fibPos(pos - 2);
+      console.log(fibPos(8));
+
+      // const getAWSProductIdImages = asyc () => {
+      //   if (data.IsTruncated){
+      //     return await getAWSProductIdImages(
+      //       productId,
+      //       s3,
+      //       resultArray,
+      //       data.NextContinuationToken
+      //     );
+      //   }
+      //   return resultArray;
+      // }
+
+      // Export from your streaming service like Spotify, YT Music etc.
+      const artistsByGenere = {
+        jazz: ["Miles Davis", "Jhon Coltrance"],
+        rock: {
+          classic: ["Bob Seger", "The Eagles"],
+          hair: ["Def Leppard", "WHitesnake", "Poison"],
+          alt: {
+            classic: ["Pearl jam", "The Killers"],
+            current: ["Joywave", "Sir sly"],
+          },
+        },
+        unclassified: {
+          new: ["camp", "Neil Yong"],
+          classic: ["Seal", "Morcheeba", "Chis Stapleron"],
+        },
+      };
+
+      const getArtistNames = (dataObj, arr = []) => {
+        Object.keys(dataObj).forEach((key) => {
+          if (Array.isArray(dataObj[key])) {
+            return dataObj[key].forEach((artist) => {
+              arr.push(artist);
+            });
+          }
+          getArtistNames(dataObj[key], arr);
+        });
+        return arr;
+      };
+      console.log(getArtistNames(artistsByGenere));
+    </script>
+  </body>
+</html>

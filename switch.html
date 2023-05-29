@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const extension = ".css";
+      let contentType;
+      switch (extension) {
+        case ".css":
+          contentType = "text/css";
+          break;
+        case ".json":
+          contentType = "application/json";
+          break;
+        case ".js":
+          contentType = "text/javascript";
+          break;
+        case ".jpg":
+          contentType = "image/jpeg";
+          break;
+        case ".png":
+          contentType = "image/png";
+          break;
+        case ".text":
+          contentType = "text/plain";
+          break;
+        default:
+          contentType = "text/html";
+      }
+
+      const extension1 = ".css";
+      const extensionObj1 = {
+        ".css": "text/css",
+        ".js": "text/javascript",
+        ".json": "image/jpeg",
+        ".png": "image/png",
+        ".txt": "text/plain",
+      };
+      console.log(extensionObj1);
+      console.log(extensionObj1[extension1] || "text/html");
+      const myMap = new Map();
+      myMap.set(".css", "text/css");
+      myMap.set(".js", "text/javascript");
+      myMap.set(".json", "application/json");
+      myMap.set(".jpg", "image/jpeg");
+      myMap.set(".png", "image/png");
+      myMap.set(".txt", "text/plain");
+      console.log(myMap.get(extension1) || "text/html");
+    </script>
+  </body>
+</html>

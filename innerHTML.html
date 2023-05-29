@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>innerHTML</title>
+  </head>
+  <body>
+    <main>
+      <section>
+        <button id="1">innerHTML</button>
+        <button id="2">Fraqgment</button>
+      </section>
+      <section>
+        <form action="">
+          <input type="text" />
+          <button type="submit">Submit</button>
+        </form>
+        <h1>Random Text</h1>
+      </section>
+    </main>
+
+    <script>
+      const initApp = () => {
+        const button1 = document.getElementById("1");
+        button1.addEventListener("click", createParse1);
+
+        const button2 = document.getElementById("2");
+        button2.addEventListener("click", createParse2);
+      };
+
+      document.addEventListener("DOMContentLoaded", initApp);
+      const createParse1 = () => {
+        const start = Date.now();
+        const main = document.querySelector("main");
+        let i = 0;
+        while (i < 500) {
+          main.innerHTML += `<p>My value is ${i}</p>`;
+          i++;
+        }
+
+        const duration = Date.now() - start;
+        console.log(`duration:${duration}`);
+      };
+      document.addEventListener("DOMContentLoaded", initApp);
+      const createParse2 = () => {
+        const start = Date.now();
+        const main = document.querySelector("main");
+        const fragment = document.createDocumentFragment();
+        let i = 0;
+        while (i < 10000) {
+          const p = document.createElement("p");
+          p.textContent = `My value is ${i}`;
+          fragment.append(p);
+          i++;
+        }
+        main.append(fragment);
+        const duration = Date.now() - start;
+        console.log(`duration :${duration}`);
+      };
+
+      //  -----------------------
+      const displayFun = async () => {
+        const form = document.querySelector("form");
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          processUserInput();
+        });
+      };
+      document.addEventListener("DOMContentLoaded", displayFun);
+      const processUserInput = () => {
+        const rawData = document.querySelector("input").value;
+        const cleanData = sanitizeInput(rawData);
+
+        const h1 = document.querySelector("h1");
+        //  h1.innerHTML = rawData;
+        h1.innerHTML = cleanData;
+      };
+
+      const sanitizeInput = (inputValue) => {
+        const div = document.createElement("div");
+        div.textContent = inputValue;
+        return div.innerHTML;
+      };
+    </script>
+  </body>
+</html>

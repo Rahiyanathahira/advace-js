@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IIFE</title>
+    <script>
+      //anonymous arrow function
+      (() => {
+        //   do stuff
+      })();
+      //with a function name (allow for recursion);
+      (function myIIFE() {
+        num++;
+        console.log(num);
+        return num !== 5 ? myIIFE(num) : console.log("finished");
+      })((num = 0));
+
+      //global
+      const x = "whatever";
+      const helloworld = () => "Hello World";
+
+      //isolated decoration within the function
+      (() => {
+        const x = "iife whatever";
+        const helloworld = () => "hello IIFE";
+        console.log(x);
+        console.log(helloworld());
+      })();
+      console.log(x);
+      console.log(helloworld());
+
+      //Private variables and methods from closure
+      const increment = (() => {
+        let counter = 0;
+        console.log(counter);
+        const credits = (num) => console.log(`I have ${num} credit(s).`);
+        return () => {
+          counter++;
+          credits(counter);
+        };
+      })();
+      increment();
+      increment();
+      //credits(3);//error
+
+      //module pattern
+      const Score = (() => {
+        let count = 0;
+        return {
+          current: () => {
+            return count;
+          },
+          increment: () => {
+            count++;
+          },
+          reset: () => {
+            count = 0;
+          },
+        };
+      })();
+      Score.increment();
+      console.log(Score.current());
+      Score.increment();
+      console.log(Score.current());
+      Score.increment();
+      console.log(Score.current());
+
+      //The Revealing Pattern is a variation of the Module Pttern
+      const Game = (() => {
+        let count = 0;
+        const current = () => {
+          return `Game score is ${count}.`;
+        };
+        const increment = () => {
+          count++;
+        };
+        const reset = () => {
+          count = 0;
+        };
+        return {
+          current: current,
+          increment: increment,
+          reset: reset,
+        };
+      })();
+
+      Game.increment();
+      console.log(Game.current());
+
+      //Injecting a namespace object
+
+      ((namespace) => {
+        namespace.count = 0;
+        namespace.current = function () {
+          return `App count is ${this.count}.`;
+        };
+        namespace.increment = function () {
+          this.count++;
+        };
+        namespace.reset = function () {
+          this.count = 0;
+        };
+      })((window.App = window.App || {}));
+      App.increment();
+      console.log(App.current());
+    </script>
+  </head>
+  <body></body>
+</html>

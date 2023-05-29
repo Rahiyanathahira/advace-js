@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shallow Copy and deep Copy</title>
+  </head>
+  <body>
+    <script>
+      //javascript data type'
+      //primitive vs structural
+      //premitive:
+      //1.undefined 2.boolean 3.number 4. stirng 5. BigInt 6. symbol
+      //structural
+      //1.object ,array,map,set,weakMap,Date 2.function
+      //premitive pass value
+      let x = 2;
+      let y = x;
+      y += 1;
+      console.log(y);
+      console.log(x);
+
+      //Structural types use references:
+      let xArray = [1, 2, 3];
+      let yArray = xArray;
+      yArray.push(4);
+      console.log(yArray);
+      console.log(xArray);
+
+      //mutable vs immutable
+      let myName = "Dave";
+      myName[0] = "w";
+      console.log(myName);
+
+      //Reassignment is not the same as mutable
+      myName = "David";
+      console.log(myName);
+
+      //structures contain mutable data
+      yArray[0] = 9;
+      console.log(yArray);
+      console.log(xArray);
+
+      //Pure function required you to avoid mutating the data
+
+      //impure function that mutats the dat
+      const addToScoreHistory = (array, score) => {
+        array.push(score);
+        return array;
+      };
+      const scoreArray = [44, 34, 45];
+      console.log(addToScoreHistory(scoreArray, 20));
+
+      //const does not make the array immutable
+
+      //shallow copy vs Deep copy
+      //shallo copy with the spread operator
+      const zArray = [...yArray, 10];
+      console.log(zArray);
+      console.log(yArray);
+
+      console.log(xArray === yArray);
+      console.log(yArray === zArray);
+
+      //with Object assign()
+      const tArray = Object.assign([], zArray);
+      console.log(tArray);
+      console.log(tArray === zArray);
+      tArray.push(11);
+      console.log(zArray);
+      console.log(tArray);
+
+      //But if there are nested arrays or objects
+      yArray.push([8, 9, 33]);
+      const vArray = [...yArray];
+      console.log(vArray);
+      vArray[4].push(5);
+      console.log(vArray);
+      console.log(yArray);
+      //nested structural data types still share a reference
+      //Array.form() and slice() create shallow copies too.
+      //Object.freeze()
+      const scoreObj = {
+        first: 44,
+        second: 12,
+        third: { a: 1, b: 2 },
+      };
+      Object.freeze(scoreObj);
+      scoreObj.third.a = 8;
+      console.log(scoreObj);
+      // still mutates it is a shallow freeze
+      //deep copy is needed to avoid this
+
+      const newScoreObj = JSON.parse(JSON.stringify(scoreObj));
+      console.log(newScoreObj);
+      console.log(newScoreObj === scoreObj);
+      const deepClone = (obj) => {
+        if (typeof obj !== "object" || obj === null) return obj;
+        //hold the value
+        const newObject = Array.isArray(obj) ? [] : {};
+        for (let key in obj) {
+          const value = obj[key];
+          newObject[key] = deepClone(value);
+        }
+        return newObject;
+      };
+
+      const newScoreArray = deepClone(scoreArray);
+      console.log(newScoreArray);
+      console.log(newScoreArray === scoreArray);
+
+      const myScoreObj = deepClone(scoreObj);
+      console.log(myScoreObj);
+      console.log(myScoreObj == scoreObj);
+
+      //now we can make a pure function
+      const pureAddToScoreHistory = (array, score, cloneFunc) => {
+        const newArray = cloneFunc(array);
+        newArray.push(score);
+        return newArray;
+      };
+      const pureScoreHistory = pureAddToScoreHistory(scoreArray, 18, deepClone);
+      console.log(pureAddToScoreHistory);
+      console.log(pureScoreHistory);
+
+      //impure function
+      let xx = 1;
+      const increment = () => (x += 1);
+      console.log(increment());
+      console.log(xx);
+
+      const myArray = [1, 2, 3];
+      const addToArray = (array, data) => {
+        array.push(data);
+        return array;
+      };
+      console.log(addToArray(myArray, 4));
+      console.log(myArray);
+
+      //refactored
+      const pureIncrement = (num) => (num += 1);
+      console.log(pureIncrement(xx));
+      console.log(xx);
+
+      //refactored
+      const pureAddToArray = (array, data) => [...array, data];
+      console.log(myArray);
+
+      const oneToFive = [1, 2, 3, 4, 5];
+      const addToFive = oneToFive.filter((elem) => elem % 2 !== 0);
+      console.log(addToFive);
+
+      const summed = oneToFive.reduce((acc, elem) => acc + elem);
+      console.log(summed);
+
+      console.log(oneToFive);
+    </script>
+  </body>
+</html>

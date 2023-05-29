@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Throttle</title>
+  </head>
+  <body>
+    <button>Throttle</button>
+    <script>
+      const initApp = () => {
+        const tbutton = document.querySelector("button");
+        tbutton.addEventListener("click", throttle(clickLog, 2000));
+        //   window.addEventListener("scroll", throttle(scrollLog, 2000));
+      };
+
+      const clickLog = () => console.log("click");
+      //const scrollLog = () => console.log("scrolling");
+      document.addEventListener("DOMContentLoaded", initApp);
+
+      const throttle = (fn, delay) => {
+        let lastTime = 0;
+        console.log("called throttle immediately");
+        let id = 0;
+        return (...args) => {
+          const now = new Date().getTime();
+          id++;
+          if (now - lastTime < delay) return;
+          lastTime = now;
+          console.log(`event id:${id}`);
+          fn(...args);
+        };
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pure Function</title>
+  </head>
+  <body>
+    <script>
+      //pure function easy to test debug
+      //1.same input always gives the same output 2.no side effects
+      const add = (x, y) => x + y;
+      console.log(add(2, 3));
+
+      const fullName = (first, last) => `${first} ${last}`;
+      console.log(fullName("Dave", "Gray"));
+      //we can replace the function with the output this is called "referential transparancy"
+      //pure function atleast have one parameter
+      //this is also means accessing the scope outside the function makes the function impure
+      const z = 5;
+      const sum = (x, y) => x + y + z;
+      console.log(2, 2);
+
+      //pure function cannot access a database ,API,file system,storage,etc. caannot modify the DOM
+    </script>
+  </body>
+</html>

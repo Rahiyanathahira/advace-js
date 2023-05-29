@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>object-compodition</title>
+  </head>
+  <body>
+    <script>
+      class Pizza {
+        constructor(size, crust, sauce) {
+          this.size = size;
+          this.crust = crust;
+          this.Pizza = Pizza;
+          this.sauce = sauce;
+          this.toppingd = [];
+        }
+        prepare() {
+          console.log("Prepring...");
+        }
+        bake() {
+          console.log("Baking...");
+        }
+        ready() {
+          console.log("Ready!");
+        }
+      }
+
+      //problem: Repeating methods
+      class Salad {
+        constructor(size, dressing) {
+          this.size = size;
+          this.dressing = dressing;
+        }
+        prepare() {
+          console.log("Prepring...");
+        }
+        toss() {
+          console.log("Tossing...");
+        }
+        ready() {
+          console.log("Ready!");
+        }
+      }
+
+      class stuffedCrustPizza extends Pizza {
+        stuff() {
+          console.log("Stuffing the crust..");
+        }
+      }
+      class butteredCrushPizza extends Pizza {
+        butter() {
+          console.log("Buttering the crust...");
+        }
+      }
+
+      //problem repeating method
+      class newAddedPizza extends Pizza {
+        stuff() {
+          console.log("Stuffing the crust..");
+        }
+        butter() {
+          console.log("Buttering the crust...");
+        }
+      }
+
+      const myPizza = new newAddedPizza();
+      myPizza.stuff();
+      myPizza.butter();
+      //instead use composition for methods
+      const prepare = () => {
+        return {
+          prepare: () => console.log("Preparing..."),
+        };
+      };
+      const bake = () => {
+        return {
+          bake: () => console.log("Baking..."),
+        };
+      };
+
+      const toss = () => {
+        return {
+          prepare: () => console.log("tossing..."),
+        };
+      };
+      const ready = () => {
+        return {
+          prepare: () => console.log("Ready..."),
+        };
+      };
+      const stuff = () => {
+        console.log("Stuffing the crust..");
+      };
+      const butter = () => {
+        console.log("Stuffing the crust..");
+      };
+      const createPizza = (size, crust, sauce) => {
+        const pizza = {
+          size: size,
+          crust: crust,
+          sauce: sauce,
+          toppings: [],
+        };
+        return {
+          ...pizza,
+          ...prepare(),
+          ...bake(),
+          ...ready(),
+        };
+      };
+
+      const createSalad = (size, dressing) => {
+        return {
+          size: size,
+          dressing: dressing,
+          ...prepare(),
+          ...toss(),
+          ...ready(),
+        };
+      };
+      //compare to ES6 Class syntax with extends and super()
+      const createStuffedButterCrustPizza = (pizza) => {
+        return {
+          ...pizza,
+          ...stuff(),
+          ...butter(),
+        };
+      };
+      const anotherPizza = createPizza("medium", "thin", "original");
+      const somebodysPizza = createStuffedButterCrustPizza(anotherPizza);
+      //or
+      const davesPizza = createStuffedButterCrustPizza(
+        createPizza("medium", "thin", "original")
+      );
+      const davesSalad = createSalad("side", "ranch");
+      davesPizza.bake();
+      //davesSalad.prepaare();
+      console.log(davesPizza);
+      console.log(davesSalad);
+
+      //   const addTopping = (pizza, topping) => {
+      //     pizza.topping.push(topping);
+      //     return pizza;
+      //   };
+
+      const jimsPizza = createPizza("medium", "thin", "original");
+      console.log(jimsPizza);
+      //console.log(addTopping(jimsPizza, "preparoni"));
+      console.log(jimsPizza); //mutation
+
+      //we need to clone the pizza object to avoid mutation
+      //function composition
+      //   const shallowPizzaClone = (fn) => {
+      //     return (obj, array) => {
+      //       const newObj = { ...obj };
+      //       return fn(newObj, array);
+      //     };
+      //   };
+      const shallowPizzaClone = (fn) => (obj, array) => fn({ ...obj }, array);
+      let addToppings = (pizza, toppings) => {
+        pizza.toppings = [...pizza.toppings, ...toppings];
+        return pizza;
+      };
+
+      //Decorate the addToppings function with shalloPizzaClone
+      addToppings = shallowPizzaClone(addToppings);
+
+      const timsOizza = createPizza("medium", "thin", "original");
+      const timsPizzaWithToppings = addToppings(timsOizza, [
+        "olives",
+        "cheese",
+        "sauce",
+      ]);
+      console.log(timsOizza);
+      console.log(timsPizzaWithToppings);
+      console.log(timsPizzaWithToppings === timsOizza);
+    </script>
+  </body>
+</html>
